@@ -44,7 +44,7 @@ A lightning-fast, SEO-optimized blog built with Astro and deployed on Cloudflare
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone [https://github.com/seefor/cf_blog.git](https://github.com/seefor/cf_blog.git)
    cd cf_blog
    ```
 
