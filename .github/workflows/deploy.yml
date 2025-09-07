@@ -30,7 +30,7 @@ jobs:
       uses: treosh/lighthouse-ci-action@v10
       with:
         configPath: './lighthouserc.json'
-        uploadArtifacts: true
+        uploadArtifacts: false
         temporaryPublicStorage: true
       env:
         LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
