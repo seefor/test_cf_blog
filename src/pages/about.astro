@@ -1,0 +1,149 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout 
+  title="About - Your Blog" 
+  description="Learn more about our blog, our mission, and the team behind the content. Discover our passion for modern web development and technology."
+>
+  <Header />
+  
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="prose prose-lg dark:prose-invert max-w-none">
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-8">About Us</h1>
+      
+      <div class="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-700 rounded-lg p-8 mb-12">
+        <p class="text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
+          Welcome to our blog! We're passionate about modern web development, cloud technologies, 
+          and sharing knowledge that helps developers build better, faster, and more accessible web experiences.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-12 mb-12">
+        <div>
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Our Mission</h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-6">
+            We believe in the power of sharing knowledge and building a stronger developer community. 
+            Our goal is to provide practical, actionable insights that help developers at all levels 
+            improve their skills and build amazing web experiences.
+          </p>
+          
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">What We Cover</h3>
+          <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              Modern JavaScript frameworks and libraries
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              Cloud platforms and deployment strategies
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              Web performance optimization
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              SEO and accessibility best practices
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              Developer tools and workflows
+            </li>
+          </ul>
+        </div>
+        
+        <div>
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Our Approach</h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-6">
+            We focus on practical, real-world examples and tutorials that you can immediately 
+            apply to your projects. Every post is thoroughly researched and tested to ensure 
+            accuracy and relevance.
+          </p>
+          
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Built with Modern Tech</h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+              This blog itself is a testament to modern web development practices:
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">Astro</span>
+              <span class="px-3 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">Tailwind CSS</span>
+              <span class="px-3 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">Cloudflare Pages</span>
+              <span class="px-3 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">TypeScript</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 mb-12">
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6 text-center">Meet the Team</h2>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+              JD
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">John Doe</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">Senior Frontend Developer</p>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">
+              Passionate about React, performance optimization, and creating delightful user experiences.
+            </p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-24 h-24 bg-green-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+              JS
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Jane Smith</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">Cloud Architect</p>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">
+              Expert in cloud infrastructure, DevOps practices, and scalable web architectures.
+            </p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-24 h-24 bg-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+              AJ
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Alex Johnson</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">Performance Engineer</p>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">
+              Focused on web performance, Core Web Vitals, and making the web faster for everyone.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Get in Touch</h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-8">
+          Have questions, suggestions, or want to collaborate? We'd love to hear from you!
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/contact" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+            Contact Us
+          </a>
+          <a href="/blog" class="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium py-3 px-6 rounded-lg transition-colors">
+            Read Our Blog
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>
