@@ -38,6 +38,7 @@ A lightning-fast, SEO-optimized blog built with Astro and deployed on Cloudflare
 - Node.js 18+ 
 - npm or yarn
 - Git
+- GitHub account
 
 ### Installation
 
@@ -52,12 +53,18 @@ A lightning-fast, SEO-optimized blog built with Astro and deployed on Cloudflare
    npm install
    ```
 
-3. **Start development server**
+3. **Set up GitHub Discussions for comments**
+   - Go to your repository Settings → Features
+   - Enable "Discussions" ✅
+   - Install Giscus app: https://github.com/apps/giscus
+   - Configure at https://giscus.app and update `src/components/Comments.astro`
+
+4. **Start development server**
    ```bash
    npm run dev
    ```
 
-4. **Open your browser**
+5. **Open your browser**
    Navigate to `http://localhost:4321`
 
 ### Build for Production
@@ -164,12 +171,20 @@ ASTRO_TELEMETRY_DISABLED=1
    ```
 3. **Update DNS**: Follow Cloudflare's DNS instructions
 
-### Comments Setup (Optional)
+### Comments Setup
+
+Comments are powered by GitHub Discussions and are required for full functionality:
 
 1. **Enable GitHub Discussions**: Repository Settings → Features → Discussions ✅
-2. **Install Giscus**: Visit https://github.com/apps/giscus
-3. **Configure**: Go to https://giscus.app and get your settings
-4. **Update**: Edit `src/components/Comments.astro` with your values
+2. **Install Giscus**: Visit https://github.com/apps/giscus and install for your repository
+3. **Configure**: Go to https://giscus.app and get your configuration values
+4. **Update**: Edit `src/components/Comments.astro` with your actual values:
+   ```javascript
+   const REPO = "your-username/your-repo";
+   const REPO_ID = "your-repo-id";
+   const CATEGORY = "General";
+   const CATEGORY_ID = "your-category-id";
+   ```
 
 ## 🎨 Customization
 
