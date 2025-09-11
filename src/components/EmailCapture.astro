@@ -1,0 +1,95 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  buttonText?: string;
+  placeholder?: string;
+}
+
+const {
+  title = "Stay Updated",
+  description = "Get notified when we publish new articles and insights.",
+  buttonText = "Subscribe",
+  placeholder = "Enter your email address"
+} = Astro.props;
+---
+
+<div class="bg-gradient-to-br from-primary/10 to-primary-dark/10 dark:from-primary-dark/20 dark:to-primary/20 rounded-lg p-8 border border-border dark:border-border-dark">
+  <div class="text-center mb-6">
+    <h3 class="text-2xl font-semibold text-text dark:text-text-dark mb-2">{title}</h3>
+    <p class="text-text-secondary dark:text-text-secondary-dark">{description}</p>
+  </div>
+  
+  <form class="email-capture-form max-w-md mx-auto" data-netlify="true" name="newsletter">
+    <div class="flex flex-col sm:flex-row gap-3">
+      <input
+        type="email"
+        name="email"
+        placeholder={placeholder}
+        required
+        class="flex-1 px-4 py-3 rounded-lg border border-border dark:border-border-dark bg-bg dark:bg-bg-secondary-dark text-text dark:text-text-dark placeholder-text-secondary dark:placeholder-text-secondary-dark focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-dark focus:border-transparent"
+      />
+      <button
+        type="submit"
+        class="px-6 py-3 bg-primary hover:bg-primary-hover dark:bg-primary-dark dark:hover:bg-primary-dark-hover text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-dark focus:ring-offset-2 focus:ring-offset-bg dark:focus:ring-offset-bg-dark"
+      >
+        {buttonText}
+      </button>
+    </div>
+    
+    <!-- Hidden field for Netlify -->
+    <input type="hidden" name="form-name" value="newsletter" />
+  </form>
+  
+  <div class="email-capture-message mt-4 text-center hidden">
+    <p class="text-sm text-text-secondary dark:text-text-secondary-dark"></p>
+  </div>
+  
+  <p class="text-xs text-text-secondary dark:text-text-secondary-dark text-center mt-4">
+    We respect your privacy. Unsubscribe at any time.
+  </p>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.email-capture-form') as HTMLFormElement;
+    const messageDiv = document.querySelector('.email-capture-message') as HTMLElement;
+    const messageParagraph = messageDiv?.querySelector('p') as HTMLElement;
+    
+    if (form) {
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        const email = formData.get('email') as string;
+        
+        if (!email) return;
+        
+        try {
+          // Submit to Netlify Forms
+          const response = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData as any).toString()
+          });
+          
+          if (response.ok) {
+            messageParagraph.textContent = 'Thank you for subscribing! Check your email for confirmation.';
+            messageParagraph.className = 'text-sm text-green-600 dark:text-green-400';
+            form.reset();
+          } else {
+            throw new Error('Network response was not ok');
+          }
+        } catch (error) {
+          messageParagraph.textContent = 'Something went wrong. Please try again.';
+          messageParagraph.className = 'text-sm text-red-600 dark:text-red-400';
+        }
+        
+        messageDiv.classList.remove('hidden');
+        setTimeout(() => {
+          messageDiv.classList.add('hidden');
+        }, 5000);
+      });
+    }
+  });
+</script>

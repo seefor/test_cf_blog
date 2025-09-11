@@ -186,6 +186,37 @@ Comments are powered by GitHub Discussions and are required for full functionali
    const CATEGORY_ID = "your-category-id";
    ```
 
+### Email Capture Setup
+
+The blog includes an email capture component on the About page for building your subscriber list:
+
+#### Option 1: Netlify Forms (Easiest)
+- Works automatically when deployed to Netlify
+- View submissions in Netlify Dashboard → Forms
+- No additional configuration needed
+
+#### Option 2: External CRM Integration
+1. **Choose your service**: Edit `src/config/crm.js` and set your preferred service
+2. **Add environment variables** in Cloudflare Pages → Settings → Environment variables:
+   ```
+   # For Mailchimp
+   MAILCHIMP_API_KEY=your-api-key
+   MAILCHIMP_SERVER_PREFIX=us1
+   MAILCHIMP_LIST_ID=your-list-id
+   
+   # For ConvertKit
+   CONVERTKIT_API_KEY=your-api-key
+   CONVERTKIT_FORM_ID=your-form-id
+   ```
+3. **Update API endpoint**: Modify `src/pages/api/subscribe.js` to use your chosen service
+
+#### Supported Services:
+- **Netlify Forms** (default, no setup required)
+- **Mailchimp** - Popular email marketing platform
+- **ConvertKit** - Creator-focused email marketing
+- **Klaviyo** - E-commerce email marketing
+- **Brevo** (formerly Sendinblue) - All-in-one marketing platform
+
 ## 🎨 Customization
 
 ### Branding
