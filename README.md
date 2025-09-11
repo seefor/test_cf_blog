@@ -198,7 +198,11 @@ Comments are powered by GitHub Discussions and are required for full functionali
 
 2. **Replace favicon** in `public/favicon.svg`
 
-3. **Update colors** in `tailwind.config.mjs`
+3. **Customize colors**: The blog uses a centralized color system for easy theming:
+   - **Quick changes**: Edit `src/config/theme.js` to modify all colors at once
+   - **Advanced**: Edit `src/styles/colors.css` for fine-grained control
+   - **Semantic classes**: Use `bg-primary`, `text-secondary`, `border-DEFAULT` instead of hardcoded Tailwind colors
+   - Colors automatically adapt for light/dark modes
 
 ### Adding New Pages
 

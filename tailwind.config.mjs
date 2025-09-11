@@ -4,6 +4,30 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        primary: {
+          DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
+          hover: 'rgb(var(--color-primary-hover) / <alpha-value>)',
+          dark: 'rgb(var(--color-primary-dark) / <alpha-value>)',
+          'dark-hover': 'rgb(var(--color-primary-dark-hover) / <alpha-value>)',
+        },
+        bg: {
+          DEFAULT: 'rgb(var(--color-bg) / <alpha-value>)',
+          dark: 'rgb(var(--color-bg-dark) / <alpha-value>)',
+          secondary: 'rgb(var(--color-bg-secondary) / <alpha-value>)',
+          'secondary-dark': 'rgb(var(--color-bg-secondary-dark) / <alpha-value>)',
+        },
+        text: {
+          DEFAULT: 'rgb(var(--color-text) / <alpha-value>)',
+          dark: 'rgb(var(--color-text-dark) / <alpha-value>)',
+          secondary: 'rgb(var(--color-text-secondary) / <alpha-value>)',
+          'secondary-dark': 'rgb(var(--color-text-secondary-dark) / <alpha-value>)',
+        },
+        border: {
+          DEFAULT: 'rgb(var(--color-border) / <alpha-value>)',
+          dark: 'rgb(var(--color-border-dark) / <alpha-value>)',
+        },
+      },
       typography: {
         DEFAULT: {
           css: {
