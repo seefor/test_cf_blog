@@ -7,6 +7,8 @@ A lightning-fast, SEO-optimized blog built with Astro and deployed on Cloudflare
 - **Lightning Fast**: Built with Astro for optimal performance
 - **SEO Optimized**: Complete meta tags, structured data, and sitemap generation
 - **Modern Design**: Responsive, accessible, and beautiful UI with dark/light mode
+- **Centralized Color System**: Easy theme customization with CSS custom properties
+- **Email Capture**: Built-in CRM integration for subscriber management
 - **Developer Experience**: TypeScript, Tailwind CSS, and hot reloading
 - **Content Management**: Markdown-based posts with frontmatter
 - **Search & Filter**: Client-side search and tag filtering
