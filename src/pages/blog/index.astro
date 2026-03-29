@@ -1,233 +1,303 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('blog'))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const pageTitle = 'Blog — Sif Baksh';
+const pageDesc = 'Practical guides on network automation, security operations, Tines, Infoblox, Ansible, and cloud infrastructure.';
 
-const featuredPosts = posts.filter(post => post.data.featured);
-const regularPosts = posts.filter(post => !post.data.featured);
+const allPosts = await getCollection('blog');
+const sorted = allPosts
+  .filter((p: any) => !p.data.draft)
+  .sort((a: any, b: any) => {
+    const da = a.data.pubDate ? new Date(a.data.pubDate) : new Date(0);
+    const db = b.data.pubDate ? new Date(b.data.pubDate) : new Date(0);
+    return db.getTime() - da.getTime();
+  });
 
-// Get unique tags
-const allTags = [...new Set(posts.flatMap(post => post.data.tags))].sort();
+const allTags = [...new Set(sorted.flatMap((p: any) => p.data.tags || []))].sort();
+
+function formatDate(d: any) {
+  if (!d) return '';
+  return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function readTime(body: string = '') {
+  return Math.max(1, Math.ceil(body.split(/\s+/).length / 200));
+}
+
+const gradients: Record<string, string> = {
+  tines: 'from-violet-600 to-purple-900',
+  infoblox: 'from-blue-600 to-blue-900',
+  ansible: 'from-red-500 to-red-900',
+  aws: 'from-orange-500 to-amber-900',
+  automation: 'from-emerald-600 to-teal-900',
+  security: 'from-rose-600 to-red-900',
+  python: 'from-yellow-500 to-yellow-900',
+  javascript: 'from-yellow-400 to-amber-800',
+  api: 'from-cyan-600 to-cyan-900',
+  cloudflare: 'from-orange-500 to-orange-900',
+  network: 'from-sky-600 to-sky-900',
+  dns: 'from-blue-500 to-indigo-900',
+  postman: 'from-orange-400 to-red-800',
+  astro: 'from-indigo-500 to-purple-900',
+};
+
+function tagGradient(tags: string[] = []) {
+  for (const tag of tags) {
+    const key = tag.toLowerCase();
+    for (const [k, v] of Object.entries(gradients)) {
+      if (key.includes(k)) return v;
+    }
+  }
+  return 'from-slate-500 to-slate-900';
+}
 ---
 
-<Layout 
-  title="Blog - Your Blog" 
-  description="Discover insights on modern web development, cloud technologies, and digital innovation. Stay updated with the latest trends and best practices."
->
+<Layout title={pageTitle} description={pageDesc}>
   <Header />
-  
-  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <!-- Page Header -->
-    <div class="text-center mb-12">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Blog</h1>
-      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-        Insights on modern web development, cloud technologies, and digital innovation
-      </p>
-    </div>
 
-    <!-- Search and Filter -->
-    <div class="mb-8 space-y-4">
-      <div class="relative max-w-md">
-        <input 
-          type="text" 
-          id="search-input"
-          placeholder="Search posts..." 
-          class="w-full px-4 py-2 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-        />
-        <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+  <!-- Hero -->
+  <section class="bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950 pt-24 pb-8 border-b border-gray-800">
+    <div class="max-w-6xl mx-auto px-6">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-3">All Posts</h1>
+      <p class="text-gray-400 text-lg mb-8">{sorted.length} posts on automation, security, and network ops</p>
+
+      <!-- Search bar -->
+      <div class="relative max-w-xl">
+        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
-      </div>
-      
-      <div class="flex flex-wrap gap-2">
-        <button class="tag-filter active px-3 py-1 text-sm rounded-full border border-blue-600 bg-blue-600 text-white transition-colors" data-tag="all">
-          All
-        </button>
-        {allTags.map(tag => (
-          <button class="tag-filter px-3 py-1 text-sm rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" data-tag={tag}>
-            {tag}
-          </button>
-        ))}
+        <input
+          id="post-search"
+          type="search"
+          placeholder="Search posts by title, topic, or tag..."
+          autocomplete="off"
+          class="w-full bg-gray-800 text-white placeholder-gray-500 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 focus:outline-none rounded-xl pl-12 pr-4 py-3 text-sm transition-all"
+        />
       </div>
     </div>
+  </section>
 
-    <!-- Featured Posts -->
-    {featuredPosts.length > 0 && (
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Featured Posts</h2>
-        <div class="grid gap-8 md:grid-cols-2">
-          {featuredPosts.map((post) => (
-            <article class="post-card bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700" data-tags={post.data.tags.join(',')}>
-              <div class="p-6">
-                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
-                  <span class="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium mr-3">Featured</span>
-                  <time datetime={post.data.pubDate.toISOString()}>
-                    {post.data.pubDate.toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </time>
-                </div>
-                
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                  <a href={`/blog/${post.slug}/`} class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                    {post.data.title}
-                  </a>
-                </h3>
-                
-                <p class="text-gray-600 dark:text-gray-300 mb-4">
-                  {post.data.description}
-                </p>
-                
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center">
-                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                      {post.data.author.charAt(0).toUpperCase()}
-                    </div>
-                    <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{post.data.author}</span>
-                  </div>
-                  
-                  <div class="flex flex-wrap gap-1">
-                    {post.data.tags.slice(0, 2).map(tag => (
-                      <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
+  <!-- Tag filter bar -->
+  <div class="bg-gray-950 border-b border-gray-800 sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-6 py-3 relative">
+      <div class="overflow-x-auto scrollbar-hide">
+        <div id="tag-filter-bar" class="flex gap-2 pb-1 min-w-max">
+          <button data-filter-tag="all" class="tag-btn active-tag px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all cursor-pointer">
+            All <span id="all-count" class="ml-1 text-xs opacity-70">{sorted.length}</span>
+          </button>
+          {allTags.map((tag: string) => {
+            const count = sorted.filter((p: any) => (p.data.tags || []).includes(tag)).length;
+            return (
+              <button data-filter-tag={tag} class="tag-btn px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all cursor-pointer">
+                {tag} <span class="ml-1 text-xs opacity-60">{count}</span>
+              </button>
+            );
+          })}
         </div>
-      </section>
-    )}
+      </div>
+      <!-- Right fade hint -->
+      <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-gray-950 to-transparent pointer-events-none"></div>
+    </div>
+  </div>
 
-    <!-- All Posts -->
-    <section>
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">All Posts</h2>
-      <div class="space-y-6" id="posts-container">
-        {regularPosts.map((post) => (
-          <article class="post-card bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700 p-6" data-tags={post.data.tags.join(',')}>
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
-              <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                <time datetime={post.data.pubDate.toISOString()}>
-                  {post.data.pubDate.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </time>
-                <span class="mx-2">•</span>
-                <div class="flex items-center">
-                  <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-medium mr-2">
-                    {post.data.author.charAt(0).toUpperCase()}
+  <!-- Post grid -->
+  <section class="bg-gray-950 min-h-screen py-10">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <!-- Results count -->
+      <p id="results-count" class="text-gray-500 text-sm mb-6">{sorted.length} posts</p>
+
+      <div id="post-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sorted.map((post: any, i: number) => {
+          const tags: string[] = post.data.tags || [];
+          const gradient = tagGradient(tags);
+          const est = readTime(post.body);
+          const tagsStr = tags.join('|');
+          return (
+            <a
+              href={`/blog/${post.slug}/`}
+              data-post="true"
+              data-tags={tagsStr.toLowerCase()}
+              data-title={(post.data.title || '').toLowerCase()}
+              data-desc={(post.data.description || '').toLowerCase()}
+              class="group bg-gray-800/60 hover:bg-gray-800 rounded-2xl overflow-hidden border border-gray-700/50 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-200 flex flex-col"
+            >
+              <!-- Image or gradient placeholder -->
+              <div class="h-44 overflow-hidden flex-shrink-0 relative">
+                {post.data.image ? (
+                  <img
+                    src={post.data.image}
+                    alt={post.data.title}
+                    width="600"
+                    height="264"
+                    loading={i < 6 ? 'eager' : 'lazy'}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div class={`w-full h-full bg-gradient-to-br ${gradient} flex flex-col justify-between p-5`}>
+                    <!-- Top: topic badge -->
+                    <div class="flex flex-wrap gap-1.5">
+                      {tags.slice(0, 2).map((t: string) => (
+                        <span class="text-xs text-white/80 bg-white/15 backdrop-blur-sm px-2.5 py-1 rounded-full font-medium">{t}</span>
+                      ))}
+                    </div>
+                    <!-- Bottom: title hint -->
+                    <p class="text-white/70 text-xs font-medium line-clamp-2 leading-relaxed">
+                      {post.data.title}
+                    </p>
                   </div>
-                  <span>{post.data.author}</span>
+                )}
+              </div>
+
+              <!-- Card body -->
+              <div class="p-5 flex-1 flex flex-col gap-3">
+                <!-- Tags -->
+                {tags.length > 0 && (
+                  <div class="flex flex-wrap gap-1.5">
+                    {tags.slice(0, 3).map((t: string) => (
+                      <span class="text-xs text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">{t}</span>
+                    ))}
+                    {tags.length > 3 && (
+                      <span class="text-xs text-gray-500">+{tags.length - 3}</span>
+                    )}
+                  </div>
+                )}
+
+                <h2 class="text-white font-semibold text-base leading-snug group-hover:text-blue-400 transition-colors line-clamp-2">
+                  {post.data.title}
+                </h2>
+
+                {post.data.description && (
+                  <p class="text-gray-400 text-sm leading-relaxed line-clamp-2 flex-1">
+                    {post.data.description}
+                  </p>
+                )}
+
+                <!-- Meta row -->
+                <div class="flex items-center justify-between text-xs text-gray-500 mt-auto pt-3 border-t border-gray-700/50">
+                  <span>{formatDate(post.data.pubDate)}</span>
+                  <span class="flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {est} min
+                  </span>
                 </div>
               </div>
-              
-              <div class="flex flex-wrap gap-1 mt-2 md:mt-0">
-                {post.data.tags.map(tag => (
-                  <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-            
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              <a href={`/blog/${post.slug}/`} class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                {post.data.title}
-              </a>
-            </h3>
-            
-            <p class="text-gray-600 dark:text-gray-300 mb-4">
-              {post.data.description}
-            </p>
-            
-            <a href={`/blog/${post.slug}/`} class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium transition-colors">
-              Read more →
             </a>
-          </article>
-        ))}
+          );
+        })}
       </div>
-      
-      <!-- No results message -->
-      <div id="no-results" class="hidden text-center py-12">
-        <p class="text-gray-600 dark:text-gray-400">No posts found matching your search criteria.</p>
+
+      <!-- No results state -->
+      <div id="no-results" class="hidden text-center py-24">
+        <svg class="w-14 h-14 mx-auto mb-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p class="text-gray-400 text-lg font-medium">No posts found</p>
+        <p class="text-gray-600 text-sm mt-2">Try adjusting your search or selecting a different tag</p>
+        <button id="clear-filters" class="mt-5 px-5 py-2 text-sm text-blue-400 border border-blue-500/30 rounded-full hover:bg-blue-500/10 transition-colors">
+          Clear filters
+        </button>
       </div>
-    </section>
-  </main>
-  
+
+    </div>
+  </section>
+
   <Footer />
 </Layout>
 
+<style>
+  .tag-btn {
+    background: rgb(31 41 55 / 0.8);
+    color: rgb(156 163 175);
+    border: 1px solid rgb(55 65 81 / 0.6);
+  }
+  .tag-btn:hover {
+    background: rgb(55 65 81);
+    color: rgb(229 231 235);
+    border-color: rgb(75 85 99);
+  }
+  .tag-btn.active-tag {
+    background: rgb(37 99 235);
+    color: white;
+    border-color: rgb(37 99 235);
+    box-shadow: 0 0 12px rgb(37 99 235 / 0.3);
+  }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
+
 <script>
-  // Search and filter functionality
-  const searchInput = document.getElementById('search-input') as HTMLInputElement;
-  const tagFilters = document.querySelectorAll('.tag-filter');
-  const postCards = document.querySelectorAll('.post-card');
+  const searchInput = document.getElementById('post-search') as HTMLInputElement | null;
+  const filterButtons = document.querySelectorAll<HTMLButtonElement>('[data-filter-tag]');
+  const posts = document.querySelectorAll<HTMLElement>('[data-post]');
   const noResults = document.getElementById('no-results');
-  
-  let currentTag = 'all';
-  let currentSearch = '';
-  
+  const resultsCount = document.getElementById('results-count');
+  const clearFiltersBtn = document.getElementById('clear-filters');
+
+  let activeTag = 'all';
+  let searchQuery = '';
+
   function filterPosts() {
-    let visibleCount = 0;
-    
-    postCards.forEach(card => {
-      const cardElement = card as HTMLElement;
-      const title = cardElement.querySelector('h3')?.textContent?.toLowerCase() || '';
-      const description = cardElement.querySelector('p')?.textContent?.toLowerCase() || '';
-      const tags = cardElement.dataset.tags?.split(',') || [];
-      
-      const matchesSearch = currentSearch === '' || 
-        title.includes(currentSearch) || 
-        description.includes(currentSearch);
-      
-      const matchesTag = currentTag === 'all' || tags.includes(currentTag);
-      
-      if (matchesSearch && matchesTag) {
-        cardElement.style.display = 'block';
-        visibleCount++;
-      } else {
-        cardElement.style.display = 'none';
-      }
+    let visible = 0;
+    posts.forEach(post => {
+      const tags = (post.dataset.tags || '').split('|').map((t: string) => t.trim());
+      const title = post.dataset.title || '';
+      const desc = post.dataset.desc || '';
+      const q = searchQuery.toLowerCase();
+
+      const tagMatch = activeTag === 'all' || tags.includes(activeTag.toLowerCase());
+      const searchMatch = !q || title.includes(q) || desc.includes(q) || tags.some((t: string) => t.includes(q));
+
+      const show = tagMatch && searchMatch;
+      post.style.display = show ? '' : 'none';
+      if (show) visible++;
     });
-    
-    if (noResults) {
-      noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+
+    if (noResults) noResults.style.display = visible === 0 ? '' : 'none';
+    if (noResults) noResults.classList.toggle('hidden', visible > 0);
+    if (resultsCount) {
+      const label = activeTag !== 'all' ? ` tagged "${activeTag}"` : '';
+      const searchLabel = searchQuery ? ` matching "${searchQuery}"` : '';
+      resultsCount.textContent = `${visible} post${visible !== 1 ? 's' : ''}${label}${searchLabel}`;
     }
   }
-  
-  // Search input handler
-  searchInput?.addEventListener('input', (e) => {
-    currentSearch = (e.target as HTMLInputElement).value.toLowerCase();
-    filterPosts();
-  });
-  
-  // Tag filter handlers
-  tagFilters.forEach(filter => {
-    filter.addEventListener('click', (e) => {
-      const button = e.target as HTMLButtonElement;
-      
-      // Update active state
-      tagFilters.forEach(f => {
-        f.classList.remove('active', 'bg-blue-600', 'text-white');
-        f.classList.add('border-gray-300', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
-      });
-      
-      button.classList.add('active', 'bg-blue-600', 'text-white');
-      button.classList.remove('border-gray-300', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
-      
-      currentTag = button.dataset.tag || 'all';
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeTag = btn.dataset.filterTag || 'all';
+      filterButtons.forEach(b => b.classList.remove('active-tag'));
+      btn.classList.add('active-tag');
       filterPosts();
     });
   });
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e: Event) => {
+      searchQuery = (e.target as HTMLInputElement).value.trim();
+      filterPosts();
+    });
+  }
+
+  if (clearFiltersBtn) {
+    clearFiltersBtn.addEventListener('click', () => {
+      activeTag = 'all';
+      searchQuery = '';
+      if (searchInput) searchInput.value = '';
+      filterButtons.forEach(b => b.classList.remove('active-tag'));
+      const allBtn = document.querySelector('[data-filter-tag="all"]');
+      if (allBtn) allBtn.classList.add('active-tag');
+      filterPosts();
+    });
+  }
 </script>
